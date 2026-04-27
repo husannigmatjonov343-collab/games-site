@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+
+{% block title %}O'yinlar - Oyinlar Blogi{% endblock %}
+
+{% block content %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #4ecdc4 0%, #45b7af 100%);
+        padding: 60px 0;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .page-header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        animation: fadeInDown 1s ease;
+    }
+    
+    .page-header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        animation: fadeInUp 1s ease;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .filter-bar {
+        background: rgba(255,255,255,0.1);
+        border-radius: 50px;
+        padding: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        backdrop-filter: blur(5px);
+    }
+    
+    .filter-bar select,
+    .filter-bar input {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        background: rgba(255,255,255,0.2);
+        color: #ffffff;
+        font-size: 1rem;
+        min-width: 200px;
+    }
+    
+    .filter-bar select option {
+        background: #2d2d44;
+    }
+    
+    .filter-bar button {
+        padding: 10px 30px;
+        border: none;
+        border-radius: 25px;
+        background: #ff6b6b;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    .filter-bar button:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+    }
+    
+    .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+    
+    .game-card {
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: 0.3s;
+        backdrop-filter: blur(5px);
+        position: relative;
+    }
+    
+    .game-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .game-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: 0.5s;
+    }
+    
+    .game-card:hover img {
+        transform: scale(1.1);
+    }
+    
+    .game-info {
+        padding: 20px;
+        position: relative;
+        background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    }
+    
+    .game-info h3 {
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+    
+    .game-info h3 a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+    .game-info h3 a:hover {
+        color: #ff6b6b;
+    }
+    
+    .game-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.7);
+    }
+    
+    .game-meta i {
+        margin-right: 5px;
+        color: #4ecdc4;
+    }
+    
+    .game-description {
+        margin-bottom: 15px;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.9);
+        font-size: 0.95rem;
+    }
+    
+    .game-platforms {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .platform-badge {
+        padding: 3px 10px;
+        background: rgba(78,205,196,0.2);
+        border: 1px solid #4ecdc4;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        color: #4ecdc4;
+    }
+    
+    .game-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .btn {
+        flex: 1;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 20px;
+        background: #ff6b6b;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+    
+    .btn:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+    }
+    
+    .btn-outline {
+        background: transparent;
+        border: 1px solid #ff6b6b;
+    }
+    
+    .btn-outline:hover {
+        background: #ff6b6b;
+    }
+    
+    /* Game Card Badge */
+    .game-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 5px 15px;
+        background: #ff6b6b;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        z-index: 1;
+    }
+    
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 50px;
+    }
+    
+    .page-link {
+        display: inline-block;
+        padding: 10px 15px;
+        background: rgba(255,255,255,0.1);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: 0.3s;
+    }
+    
+    .page-link:hover,
+    .page-link.active {
+        background: #ff6b6b;
+        transform: translateY(-2px);
+    }
+    
+    /* No games */
+    .no-games {
+        text-align: center;
+        padding: 80px 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
+        grid-column: 1 / -1;
+    }
+    
+    .no-games i {
+        font-size: 5rem;
+        color: #ff6b6b;
+        margin-bottom: 20px;
+    }
+    
+    .no-games h3 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .no-games p {
+        color: rgba(255,255,255,0.7);
+    }
+    
+    @media (max-width: 768px) {
+        .page-header h1 {
+            font-size: 2rem;
+        }
+        
+        .filter-bar {
+            flex-direction: column;
+            border-radius: 20px;
+        }
+        
+        .filter-bar select,
+        .filter-bar input {
+            width: 100%;
+        }
+        
+        .games-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>O'yinlar</h1>
+        <p>Eng so'nggi va mashhur o'yinlar haqida ma'lumot</p>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <form method="GET" style="display: flex; gap: 20px; width: 100%; flex-wrap: wrap; justify-content: center;">
+            <input type="text" name="q" placeholder="O'yin qidirish..." value="{{ query }}" style="flex: 1;">
+            <select name="platform">
+                <option value="">Barcha platformalar</option>
+                <option value="PC">PC</option>
+                <option value="PS5">PS5</option>
+                <option value="PS4">PS4</option>
+                <option value="Xbox Series X">Xbox Series X</option>
+                <option value="Xbox One">Xbox One</option>
+                <option value="Nintendo Switch">Nintendo Switch</option>
+                <option value="Mobile">Mobile</option>
+            </select>
+            <select name="sort">
+                <option value="-release_date">Eng yangi</option>
+                <option value="release_date">Eng eski</option>
+                <option value="title">Nomi (A-Z)</option>
+                <option value="-title">Nomi (Z-A)</option>
+            </select>
+            <button type="submit">Filterlash</button>
+        </form>
+    </div>
+    
+    <!-- Games Grid -->
+    <div class="games-grid">
+        {% for game in games %}
+            <div class="game-card">
+                {% if forloop.first %}
+                    <div class="game-badge">Yangi!</div>
+                {% endif %}
+                <img src="{{ game.image.url }}" alt="{{ game.title }}">
+                <div class="game-info">
+                    <h3><a href="{{ game.get_absolute_url }}">{{ game.title }}</a></h3>
+                    <div class="game-meta">
+                        <span><i class="fas fa-code-branch"></i> {{ game.developer }}</span>
+                        <span><i class="fas fa-calendar"></i> {{ game.release_date|date:"Y" }}</span>
+                    </div>
+                    <div class="game-platforms">
+                        {% if game.platform %}
+                            {% for platform in game.platform.split %}
+                                <span class="platform-badge">{{ platform }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <p class="game-description">{{ game.description|truncatewords:15|safe }}</p>
+                    <div class="game-actions">
+                        <a href="{{ game.get_absolute_url }}" class="btn">Batafsil</a>
+                        {% if game.website %}
+                            <a href="{{ game.website }}" target="_blank" class="btn btn-outline">Sayt</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="no-games">
+                <i class="fas fa-gamepad"></i>
+                <h3>O'yinlar topilmadi</h3>
+                <p>Qidiruv so'rovingiz bo'yicha hech qanday o'yin topilmadi.</p>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if games.has_other_pages %}
+        <div class="pagination">
+            {% if games.has_previous %}
+                <a href="?page={{ games.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="page-link">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            {% endif %}
+            
+            {% for i in games.paginator.page_range %}
+                {% if games.number == i %}
+                    <span class="page-link active">{{ i }}</span>
+                {% else %}
+                    <a href="?page={{ i }}{% if query %}&q={{ query }}{% endif %}" class="page-link">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if games.has_next %}
+                <a href="?page={{ games.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="page-link">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+</body>
+</html>

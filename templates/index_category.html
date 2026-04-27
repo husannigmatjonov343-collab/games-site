@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends 'base.html' %}
+
+{% block title %}{{ category.name }} - Oyinlar Blogi{% endblock %}
+
+{% block content %}
+<style>
+    .category-header {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+        padding: 80px 0;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .category-header h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        animation: fadeInDown 1s ease;
+    }
+    
+    .category-header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto;
+        animation: fadeInUp 1s ease;
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .category-stats {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ffffff;
+    }
+    
+    .stat-label {
+        color: rgba(255,255,255,0.8);
+        font-size: 0.9rem;
+    }
+    
+    .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+    
+    .post-card {
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: 0.3s;
+        backdrop-filter: blur(5px);
+    }
+    
+    .post-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .post-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+    
+    .post-content {
+        padding: 20px;
+    }
+    
+    .post-content h3 {
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+    
+    .post-content h3 a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+    .post-content h3 a:hover {
+        color: #ff6b6b;
+    }
+    
+    .post-meta {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.7);
+    }
+    
+    .post-meta i {
+        margin-right: 5px;
+        color: #4ecdc4;
+    }
+    
+    .post-excerpt {
+        margin-bottom: 15px;
+        line-height: 1.6;
+        color: rgba(255,255,255,0.9);
+    }
+    
+    .read-more {
+        color: #ff6b6b;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    
+    .read-more:hover {
+        color: #ff5252;
+        padding-left: 5px;
+    }
+    
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 50px;
+    }
+    
+    .page-link {
+        display: inline-block;
+        padding: 10px 15px;
+        background: rgba(255,255,255,0.1);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: 0.3s;
+    }
+    
+    .page-link:hover,
+    .page-link.active {
+        background: #ff6b6b;
+        transform: translateY(-2px);
+    }
+    
+    /* No posts */
+    .no-posts {
+        text-align: center;
+        padding: 80px 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 15px;
+        grid-column: 1 / -1;
+    }
+    
+    .no-posts i {
+        font-size: 5rem;
+        color: #ff6b6b;
+        margin-bottom: 20px;
+    }
+    
+    .no-posts h3 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .no-posts p {
+        color: rgba(255,255,255,0.7);
+        margin-bottom: 25px;
+    }
+    
+    .no-posts .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #ff6b6b;
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        transition: 0.3s;
+    }
+    
+    .no-posts .btn:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+    }
+    
+    @media (max-width: 768px) {
+        .category-header h1 {
+            font-size: 2rem;
+        }
+        
+        .category-stats {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .posts-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- Category Header -->
+<section class="category-header">
+    <div class="container">
+        <h1>{{ category.name }}</h1>
+        {% if category.description %}
+            <p>{{ category.description }}</p>
+        {% endif %}
+        
+        <div class="category-stats">
+            <div class="stat-item">
+                <div class="stat-number">{{ posts.paginator.count }}</div>
+                <div class="stat-label">Postlar soni</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">{{ posts|length }}</div>
+                <div class="stat-label">Bu sahifada</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Posts Grid -->
+    <div class="posts-grid">
+        {% for post in posts %}
+            <div class="post-card">
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                <div class="post-content">
+                    <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                    <div class="post-meta">
+                        <span><i class="fas fa-user"></i> {{ post.author.username }}</span>
+                        <span><i class="fas fa-calendar"></i> {{ post.published_date|date:"d.m.Y" }}</span>
+                    </div>
+                    <p class="post-excerpt">{{ post.content|truncatewords:20|safe }}</p>
+                    <a href="{{ post.get_absolute_url }}" class="read-more">Batafsil <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="no-posts">
+                <i class="fas fa-folder-open"></i>
+                <h3>Bu kategoriyada hozircha postlar yo'q</h3>
+                <p>Tez orada yangi postlar qo'shiladi</p>
+                <a href="{% url 'post_list' %}" class="btn">Barcha postlarni ko'rish</a>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if posts.has_other_pages %}
+        <div class="pagination">
+            {% if posts.has_previous %}
+                <a href="?page={{ posts.previous_page_number }}" class="page-link">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            {% endif %}
+            
+            {% for i in posts.paginator.page_range %}
+                {% if posts.number == i %}
+                    <span class="page-link active">{{ i }}</span>
+                {% else %}
+                    <a href="?page={{ i }}" class="page-link">{{ i }}</a>
+                {% endif %}
+            {% endfor %}
+            
+            {% if posts.has_next %}
+                <a href="?page={{ posts.next_page_number }}" class="page-link">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+</body>
+</html>
