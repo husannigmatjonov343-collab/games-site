@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}O'yinlar haqida{% endblock %}
+
+{% block content %}
+<style>
+    .g-hero {
+        background: linear-gradient(120deg, #0d9488, #06b6d4);
+        padding: 60px 20px 70px;
+        text-align: center;
+    }
+    .g-hero h1 { color: #fff; font-size: 36px; margin-bottom: 10px; }
+    .g-hero p { color: #ecfeff; font-size: 16px; opacity: 0.9; }
+    .g-wrap { max-width: 950px; margin: -40px auto 60px; padding: 0 20px; }
+
+    .stat-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+    .stat-card {
+        background: #1a1f36;
+        border: 1px solid #2c3454;
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+    }
+    .stat-card .num { font-size: 26px; font-weight: 800; color: #22d3ee; }
+    .stat-card .lbl { color: #94a3b8; font-size: 13px; margin-top: 4px; }
+
+    .g-article {
+        background: #1a1f36;
+        border: 1px solid #2c3454;
+        border-radius: 16px;
+        padding: 26px 28px;
+        margin-bottom: 22px;
+    }
+    .g-article .tag {
+        display: inline-block;
+        background: rgba(34,211,238,0.15);
+        color: #22d3ee;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 14px;
+        border-radius: 20px;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .g-article h2 { color: #f1f5f9; font-size: 21px; margin-bottom: 12px; }
+    .g-article p { color: #cbd5e1; line-height: 1.8; font-size: 15px; margin-bottom: 12px; }
+    .g-article ul { color: #cbd5e1; line-height: 1.8; font-size: 15px; padding-left: 20px; margin-bottom: 12px; }
+    .g-article b { color: #e2e8f0; }
+
+    .fact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
+    }
+    .fact-card {
+        background: #0f1329;
+        border-left: 3px solid #22d3ee;
+        border-radius: 10px;
+        padding: 14px 16px;
+        font-size: 14px;
+        color: #cbd5e1;
+    }
+</style>
+
+<div class="g-hero">
+    <h1>O'yinlar dunyosi</h1>
+    <p>Raqamlar, faktlar va qiziqarli ma'lumotlar</p>
+</div>
+
+<div class="g-wrap">
+
+    <div class="stat-row">
+        <div class="stat-card"><div class="num">$2 mlrd</div><div class="lbl">GTA VI budjeti (taxminan)</div></div>
+        <div class="stat-card"><div class="num">656 mln$</div><div class="lbl">Star Citizen homiyligi</div></div>
+        <div class="stat-card"><div class="num">300-500</div><div class="lbl">AAA o'yin jamoasi (kishi)</div></div>
+        <div class="stat-card"><div class="num">5-7 yil</div><div class="lbl">Bitta o'yin ishlab chiqish vaqti</div></div>
+    </div>
+
+    <div class="g-article">
+        <span class="tag">Rekordlar</span>
+        <h2>Dunyodagi eng qimmat video o'yin qanchaga tushdi?</h2>
+        <p>
+            Video o'yinlar sanoati endi Golliвud kinolaridan ham katta pul aylantiradi.
+            <b>Grand Theft Auto VI</b> hozircha eng qimmat loyihalardan biri — tahlilchilarning
+            taxminiga ko'ra byudjeti <b>1-2 milliard dollar</b>ga yetishi mumkin, bu esa uni
+            butun tarixdagi eng qimmat ko'ngilochar mahsulotlardan biriga aylantiradi.
+        </p>
+        <p>
+            <b>Star Citizen</b> esa boshqacha yo'ldan bordi — o'yin hali to'liq chiqmagan bo'lsa-da,
+            muxlislardan yig'ilgan mablag' <b>656 million dollar</b>dan oshib ketdi.
+        </p>
+        <p>Nega zamonaviy o'yinlar bunchalik qimmat?</p>
+        <ul>
+            <li>4K grafika uchun talab qilinadigan detallar</li>
+            <li>300-500 kishilik ulkan jamoalar (avval 20-30 kishi yetarli edi)</li>
+            <li>5-7 yillik ishlab chiqish davri</li>
+            <li>Motion-capture texnologiyasi va ovoz aktyorlari</li>
+            <li>Onlayn infratuzilma va uzoq muddatli qo'llab-quvvatlash</li>
+        </ul>
+    </div>
+
+    <div class="g-article">
+        <span class="tag">Foyda</span>
+        <h2>Video o'yinlar — miya uchun sport zali</h2>
+        <p>Ko'pchilik o'yinlarni faqat "vaqt o'ldirish" deb hisoblaydi, lekin ular haqiqatan ham foyda keltiradi:</p>
+        <div class="fact-grid">
+            <div class="fact-card"><b>Reaksiya tezligi</b><br>Shutter janridagi o'yinlar tezkor qaror qabul qilishni o'rgatadi</div>
+            <div class="fact-card"><b>Muammo yechish</b><br>Strategiya va bulmaca o'yinlari mantiqiy fikrlashni rivojlantiradi</div>
+            <div class="fact-card"><b>Jamoaviy ish</b><br>Ko'p o'yinchili o'yinlar muloqot ko'nikmalarini shakllantiradi</div>
+            <div class="fact-card"><b>Ijodkorlik</b><br>Sandbox o'yinlar (Minecraft) dizayn va arxitektura tafakkurini o'stiradi</div>
+        </div>
+    </div>
+
+    <div class="g-article">
+        <span class="tag">Ehtiyot bo'ling</span>
+        <h2>O'yin qachon zararga aylanadi?</h2>
+        <p>
+            O'yinning o'zi yomon emas — muammo undan qanday foydalanishda. Jahon Sog'liqni Saqlash
+            Tashkiloti 2019-yilda <b>"gaming disorder"</b> (o'yinga bog'lanib qolish) atamasini rasman
+            tan olgan — bu faqat o'yin hayotning boshqa barcha jabhalaridan (o'qish, uyqu, do'stlar) ustun
+            kelib qolganda paydo bo'ladigan holat.
+        </p>
+        <p><b>Belgilar:</b></p>
+        <ul>
+            <li>Uyqu va o'qish hisobiga uzoq o'ynash</li>
+            <li>O'yindan chetlashtirilganda kuchli asabiylashish</li>
+            <li>Real hayotdagi aloqalarni kamaytirish</li>
+        </ul>
+        <p>Yechim — oddiy: vaqtni rejalashtirish va muvozanatni saqlash.</p>
+    </div>
+
+</div>
+{% endblock %}

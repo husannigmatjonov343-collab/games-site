@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+{% extends 'base.html' %}
+
+{% block title %}Qidiruv - Oyinlar Blogi{% endblock %}
+
+{% block content %}
+<style>
+    .search-header {
+        background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+        padding: 60px 0;
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .search-header h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        animation: fadeInDown 1s ease;
+    }
+    
+    .search-form {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        gap: 10px;
+        animation: fadeInUp 1s ease;
+    }
+    
+    .search-form input {
+        flex: 1;
+        padding: 15px 20px;
+        border: none;
+        border-radius: 30px;
+        background: rgba(255,255,255,0.2);
+        color: #ffffff;
+        font-size: 1.1rem;
+    }
+    
+    .search-form input::placeholder {
+        color: rgba(255,255,255,0.7);
+    }
+    
+    .search-form button {
+        padding: 15px 40px;
+        border: none;
+        border-radius: 30px;
+        background: #ff6b6b;
+        color: white;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    
+    .search-form button:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .search-stats {
+        text-align: center;
+        margin-bottom: 40px;
+        color: rgba(255,255,255,0.7);
+        font-size: 1.1rem;
+    }
+    
+    .search-results {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 40px;
+        margin-bottom: 50px;
+    }
+    
+    .result-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 20px;
+        padding: 30px;
+        backdrop-filter: blur(5px);
+    }
+    
+    .result-section h2 {
+        color: #ff6b6b;
+        margin-bottom: 25px;
+        font-size: 1.8rem;
+        border-bottom: 2px solid #4ecdc4;
+        padding-bottom: 10px;
+    }
+    
+    .result-section h2 i {
+        margin-right: 10px;
+        color: #4ecdc4;
+    }
+    
+    .result-item {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+    
+    .result-item:hover {
+        background: rgba(255,107,107,0.1);
+        transform: translateX(5px);
+    }
+    
+    .result-item h3 {
+        margin-bottom: 8px;
+    }
+    
+    .result-item h3 a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 1.2rem;
+    }
+    
+    .result-item h3 a:hover {
+        color: #ff6b6b;
+    }
+    
+    .result-meta {
+        display: flex;
+        gap: 20px;
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 8px;
+    }
+    
+    .result-meta i {
+        margin-right: 5px;
+        color: #4ecdc4;
+    }
+    
+    .result-excerpt {
+        color: rgba(255,255,255,0.8);
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 80px 20px;
+    }
+    
+    .no-results i {
+        font-size: 5rem;
+        color: #ff6b6b;
+        margin-bottom: 20px;
+    }
+    
+    .no-results h3 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .no-results p {
+        color: rgba(255,255,255,0.7);
+        margin-bottom: 25px;
+    }
+    
+    .no-results .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background: #ff6b6b;
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        transition: 0.3s;
+    }
+    
+    .no-results .btn:hover {
+        background: #ff5252;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+    }
+    
+    .game-item {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    .game-item img {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    
+    .game-item .game-info {
+        flex: 1;
+    }
+    
+    .game-item .game-info h4 {
+        margin-bottom: 5px;
+    }
+    
+    .game-item .game-info h4 a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+    .game-item .game-info h4 a:hover {
+        color: #ff6b6b;
+    }
+    
+    .game-item .game-meta {
+        font-size: 0.85rem;
+        color: rgba(255,255,255,0.5);
+    }
+    
+    @media (max-width: 768px) {
+        .search-header h1 {
+            font-size: 2rem;
+        }
+        
+        .search-form {
+            flex-direction: column;
+        }
+        
+        .search-results {
+            grid-template-columns: 1fr;
+        }
+        
+        .result-section {
+            padding: 20px;
+        }
+    }
+</style>
+
+<!-- Search Header -->
+<section class="search-header">
+    <div class="container">
+        <h1>Qidiruv</h1>
+        <form class="search-form" method="GET" action="{% url 'search' %}">
+            <input type="text" name="query" placeholder="O'yin yoki post qidirish..." value="{{ query }}">
+            <button type="submit"><i class="fas fa-search"></i> Qidirish</button>
+        </form>
+    </div>
+</section>
+
+<div class="container">
+    {% if query %}
+        <!-- Search Stats -->
+        <div class="search-stats">
+            <i class="fas fa-info-circle"></i>
+            "{{ query }}" bo'yicha qidiruv natijalari:
+            {{ posts|length }} ta post va {{ games|length }} ta o'yin topildi
+        </div>
+        
+        <!-- Search Results -->
+        <div class="search-results">
+            <!-- Posts Section -->
+            {% if posts %}
+            <div class="result-section">
+                <h2><i class="fas fa-newspaper"></i> Postlar</h2>
+                {% for post in posts %}
+                    <div class="result-item">
+                        <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                        <div class="result-meta">
+                            <span><i class="fas fa-user"></i> {{ post.author.username }}</span>
+                            <span><i class="fas fa-folder"></i> {{ post.category.name }}</span>
+                            <span><i class="fas fa-calendar"></i> {{ post.published_date|date:"d.m.Y" }}</span>
+                        </div>
+                        <div class="result-excerpt">
+                            {{ post.content|truncatewords:30|safe }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Games Section -->
+            {% if games %}
+            <div class="result-section">
+                <h2><i class="fas fa-gamepad"></i> O'yinlar</h2>
+                {% for game in games %}
+                    <div class="result-item game-item">
+                        <img src="{{ game.image.url }}" alt="{{ game.title }}">
+                        <div class="game-info">
+                            <h4><a href="{{ game.get_absolute_url }}">{{ game.title }}</a></h4>
+                            <div class="game-meta">
+                                <span><i class="fas fa-code-branch"></i> {{ game.developer }}</span>
+                                <span class="ms-3"><i class="fas fa-calendar"></i> {{ game.release_date|date:"Y" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- No Results -->
+            {% if not posts and not games %}
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>Hech narsa topilmadi</h3>
+                    <p>"{{ query }}" bo'yicha hech qanday natija topilmadi.</p>
+                    <a href="{% url 'search' %}" class="btn">Yangi qidiruv</a>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <!-- Initial Search Page -->
+        <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h3>Qidiruv so'zini kiriting</h3>
+            <p>O'yinlar va postlar orasidan qidirishingiz mumkin.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+</body>
+</html>
