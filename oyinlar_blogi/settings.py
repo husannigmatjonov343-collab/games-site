@@ -24,9 +24,8 @@ SECRET_KEY = 'django-insecure-your-secret-key-here'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'games-site-23aj.onrender.com',
-    'localhost', 
-    '127.0.0.1'
+    '127.0.0.1',
+"games-site-jade.vercel.app"
 ]
 # Application definition
 INSTALLED_APPS = [
